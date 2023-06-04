@@ -33,19 +33,29 @@ prepare() {
 		sed -i -E -e "s/check_one\(termcs, \"EBCDIC/-- EBCDIC/g" test_iconv.lua
 		# musl does not output EILSEQ.
 		sed -i -E -e "s/assert\(e == iconv.ERROR_INVALID/-- ERROR_INVALID/g" test_iconv.lua
+	elif [ "$MINGW_WINDOWS" == "true" ]; then
+		# mingw iconv only recognises them with a dash
+		sed -i -E -e "s/\"utf8\"/\"utf-8\"/g" test_iconv.lua
+		sed -i -E -e "s/\"utf16\"/\"utf-16\"/g" test_iconv.lua
 	fi
 }
 
 build() {
 	cd "$pkgname"
 
-	gcc -c -o iconv.lo $WF_RUNTIME_INCLUDES -fPIC -O3 -Wall luaiconv.c
-	gcc -o iconv"$WF_LIBRARY_SUFFIX" -shared $WF_LUA_LDFLAGS iconv.lo
+	gcc -c -o iconv.lo $WF_RUNTIME_INCLUDES -O3 -Wall luaiconv.c
+
+	if [ "$MINGW_WINDOWS" == "true" ]; then
+		EXPLICIT_ICONV_LINK="-liconv"
+	fi
+
+	gcc -o iconv"$WF_LIBRARY_SUFFIX" -shared iconv.lo "$WF_LUA_LDFLAGS" "$EXPLICIT_ICONV_LINK"
 }
 
 check() {
 	cd "$pkgname"
 
+	export LUA_CPATH="C:/msys64/wf/packages/wf-lua-iconv/src/wf-lua-iconv/?.dll"
 	$WF_PATH/bin/wf-lua test_iconv.lua
 }
 

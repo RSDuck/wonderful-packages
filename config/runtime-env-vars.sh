@@ -9,6 +9,17 @@ WF_DESTDIR="/"
 WF_USE_MUSL=true
 WF_LIBRARY_SUFFIX=.so
 
+MINGW_WINDOWS=false
+
+case `uname` in MINGW*)
+	WF_USE_MUSL=false
+	WF_LIBRARY_SUFFIX=.dll
+	WF_DESTDIR="/opt/wonderful/"
+
+	MINGW_WINDOWS=true
+	WF_LUA_LDFLAGS=-llua
+esac
+
 WF_RUNTIME_LDFLAGS="-Wl,-rpath,$WF_PATH/lib -Wl,--dynamic-linker=$WF_PATH/lib/ld-musl-$CARCH.so.1"
 
 WF_RUNTIME_INCLUDES="-I$WF_PATH/include"

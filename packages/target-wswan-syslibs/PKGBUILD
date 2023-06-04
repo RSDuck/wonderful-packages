@@ -22,12 +22,13 @@ options=(!strip)
 . "../templates/git-pkgver.PKGBUILD"
 
 build() {
+	CFLAGS=""
 	cd "$pkgname"
 	./build.sh
 }
 
 package() {
 	cd "$pkgname"
-	mkdir -p "$pkgdir"
+	mkdir -p "$pkgdir$WF_DESTDIR"
 	cp -aR build/target "$pkgdir$WF_DESTDIR"
 }

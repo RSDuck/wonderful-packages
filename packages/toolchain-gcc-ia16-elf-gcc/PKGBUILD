@@ -50,6 +50,12 @@ prepare() {
 
 build() {
 	cd gcc-build
+
+	# workaround for https://gcc.gnu.org/bugzilla//show_bug.cgi?id=108300
+	if [ "$MINGW_WINDOWS" == "true" ]; then
+		CPPFLAGS='-DWIN32_LEAN_AND_MEAN'
+	fi
+
 	../"$pkgname"/configure \
 		--prefix="/opt/wonderful/toolchain/gcc-ia16-elf" \
 		--target=ia16-elf \

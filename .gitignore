@@ -1,3 +1,17 @@
 build
 **/pkg
 **/src
+
+*.sample
+*.zst
+
+config
+description
+FETCH_HEAD
+HEAD
+packed-refs
+exclude
+*.idx
+*.pack
+*.xz
+*.gz

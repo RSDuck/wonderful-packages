@@ -1,0 +1,26 @@
+# SPDX-License-Identifier: CC0-1.0
+#
+# SPDX-FileContributor: Adrian "asie" Siekierka, 2023
+
+pkgname=(runtime-musl runtime-musl-dev)
+pkgver=1.2.4
+pkgrel=1
+epoch=
+pkgdesc="musl runtime (dummy)"
+arch=("i686" "x86_64" "armv6h" "aarch64")
+license=("MIT")
+source=()
+sha256sums=()
+
+prepare() {
+	true
+}
+
+package_runtime-musl() {
+	groups=(wonderful-base)
+}
+
+package_runtime-musl-dev() {
+	pkgdesc="musl runtime development files (dummy)"
+	depends=(runtime-musl)
+}
